@@ -1,0 +1,41 @@
+.section-header-block {
+	margin-bottom: 2em;
+}
+.question-block {
+	margin-bottom: 1em;
+	margin-left: 1em;
+}
+.choice-group {
+	margin-left: 1em;
+}
+.radio-group {
+}
+.select-group {
+}
+.radio-item, .check-item {
+	margin-bottom: 0.2em;
+}
+.text-area-item {
+	margin-left: 1em;
+}
+.text-field-item {
+	margin-left: 0.5em;
+	display: inline;
+}
+
+.matrix-table {
+	width: 98%;
+}
+
+.matrix-first-column {
+	width: 20%;
+}
+
+.matrix-column {
+	text-align: center;
+	vertical-align: bottom;
+	width: 10%;
+}
+.matrix-range-text {
+	font-size: 75%;
+}

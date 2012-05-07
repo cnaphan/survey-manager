@@ -1,0 +1,18 @@
+*.class
+/target
+
+# Eclipse temp files
+/.classpath
+/.project
+/.settings
+/stacktrace.log
+/target-eclipse
+
+# jEdit temp files
+*.*~
+*.*#
+
+# Package Files #
+*.jar
+*.war
+*.ear

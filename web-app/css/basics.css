@@ -1,0 +1,54 @@
+/* These styles are shared between all templates */
+
+/* MESSAGES */
+
+#messages {
+	background-color: #FAFAD2;
+	margin: 0.5em 10%;
+	width: 60%;
+	border: 1px solid #BDB76B;
+	   -moz-box-shadow: 0 0 0.5em #EEE8AA;
+	-webkit-box-shadow: 0 0 0.5em #EEE8AA;
+	        box-shadow: 0 0 0.5em #EEE8AA;
+}
+
+#messages.errors {
+	background: #fff3f3;
+	border: 1px solid #ffaaaa;
+	color: #cc0000;
+	   -moz-box-shadow: 0 0 0.25em #ff8888;
+	-webkit-box-shadow: 0 0 0.25em #ff8888;
+	        box-shadow: 0 0 0.25em #ff8888;
+}
+
+#messages ul {
+	padding: 0;
+}
+
+#messages li {
+	list-style: none;
+	background: transparent url(../images/skin/information.png) 0.5em 50% no-repeat;
+	padding-left: 2.2em;
+}
+#messages li.error {
+	background-image: url(../images/skin/exclamation.png)
+}
+#messages li.warn {
+	background-image: url(../images/warning.png)
+	
+}
+
+/* USER OPTIONS */
+
+#user-div {
+	float: right; 
+	width: 10em; 
+	border: 0.1em solid #DDD; 
+	background-color: #FCFCFC;
+	padding: 1em;
+}
+
+#user-div h3 {
+	margin: 0;
+	padding: 0;
+}

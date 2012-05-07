@@ -1,0 +1,459 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	padding: 0;
+	margin: 0;
+	font-family: Calibri, Arial, sans-serif;
+	font-size: 0.9em;
+}
+
+/* Header elements */
+
+#header {
+	margin: 0;
+	color: #888;
+	background-color: #EDEDED;
+	padding: 0 0.5em;
+	border-bottom: 0.1em solid #DDDDDD;
+	text-align: center;
+	   -moz-box-shadow: 0 0 0.5em #DDDDDD;
+    -webkit-box-shadow: 0 0 0.5em #DDDDDD;
+            box-shadow: 0 0 0.5em #DDDDDD;
+}
+
+#header img { 
+	margin: 0.3em 0.3em 0 0;
+	border: 0; 
+}
+
+#header #home a {		
+	text-decoration: none;	
+					
+}
+#header a, #footer a {
+	color: #888;
+}
+#header h1 {
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-top: 0.7em;
+}
+
+#header #login {
+	float: right;
+	padding: 0.9em 0;
+}
+
+#header #middle {
+	width: 50%;
+	margin-left: 25%;
+	padding: 0.4em;
+	height: 2.3em;
+	border: solid #DDDDDD;
+	border-width: 0 0.1em;
+	text-align: left;
+}
+
+#header #middle #survey-info {
+	float: left;
+	padding-top: 0.6em;
+}
+
+#header #middle #quick-links {
+	float: right;
+}
+
+.clearer {
+	clear: both;
+	height: 0px;
+}
+
+/* Body elements */
+
+#body {
+	margin: 0em 1em 20em 1em;
+}
+
+#body.indented {
+	margin-left: 16em;
+}
+#body.narrow {
+	margin-left: 20%;
+	width: 60%;
+}
+
+h1, h2, h3 {
+	font-family: Cambria, Arial, serif;
+	margin: 0.5em 0;
+}
+
+h1, #header h1 a, h2, h3 {
+	color: navy;
+}
+
+hr {
+	border: 0.1em solid #DDD;
+	border-width: 0.1em 0 0 0;
+	margin: 1em 0;
+	padding: 0;
+}
+
+li {
+	margin: 0.5em auto;
+}
+
+.buttons {
+	margin: 0.7em 0;
+	padding: 0;
+}
+
+.buttons button, .buttons input { 
+	margin: 0; 
+}
+
+/* The status bar */
+#status {
+	border-right: .1em solid #DDD;
+	padding: 1em 1em 0.5em 1em;
+	width: 13em;
+	float: left;
+	min-height: 25em;
+}
+
+#status ul {
+	font-size: 0.9em;
+	list-style-type: none;
+	margin: 0 0.6em;
+	padding: 0;
+}  
+
+#status li {
+	line-height: 1.3;
+}
+
+#status h1 {
+	text-transform: uppercase;
+	font-size: 1.1em;
+	margin: 0.4em 0;
+	padding: 0;
+}
+
+/* TABLES */
+
+#body table {
+	border-top: 1px solid #DFDFDF;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#body table tr {
+	border: 0;
+}
+
+#body table tr>td:first-child, tr>th:first-child {
+	padding-left: 1.25em;
+}
+
+#body table tr>td:last-child, tr>th:last-child {
+	padding-right: 1.25em;
+}
+
+#body table td, #body table th {
+	line-height: 1.5em;
+	padding: 0.5em 0.6em;
+	text-align: left;
+	vertical-align: top;
+}
+
+#body table th, .pagination {
+	background-color: #efefef;
+	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+	color: #666666;
+	font-weight: bold;
+	line-height: 1.7em;
+	padding: 0.2em 0.6em;
+}
+
+#body table thead th {
+	white-space: nowrap;
+}
+
+#body table th a {
+	display: block;
+	text-decoration: none;
+}
+
+#body table th a:link, th a:visited {
+	color: #666666;
+}
+
+#body table th a:hover, th a:focus {
+	color: #333333;
+}
+
+th.sortable a {
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right: 1.1em;
+}
+
+th.asc a {
+	background-image: url(../images/skin/sorted_asc.gif);
+}
+
+th.desc a {
+	background-image: url(../images/skin/sorted_desc.gif);
+}
+
+.odd {
+	background: #f4f4f4;
+}
+
+.even {
+	background: #ffffff;
+}
+
+#body table th:hover, #body table tr:hover {
+	background: #B0C4DE;
+}
+
+/* PAGINATION */
+
+.pagination {
+	margin: 0;
+	padding: 0.3em 0.2em;
+	text-align: center;
+	border-top: 1px solid #DFDFDF;
+	border-collapse: collapse;
+
+	/*background-color: #EFEFEF;*/
+}
+
+.pagination a,
+.pagination .currentStep {
+	color: #666666;
+	display: inline-block;
+	margin: 0 0.1em;
+	padding: 0em 0.7em;
+	text-decoration: none;
+	   -moz-border-radius: 0.3em;
+	-webkit-border-radius: 0.3em;
+	        border-radius: 0.3em;
+}
+
+.pagination a:hover, .pagination a:focus,
+.pagination .currentStep {
+	background-color: #999999;
+	color: #ffffff;
+	outline: none;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+.no-borderradius .pagination a:hover, .no-borderradius .pagination a:focus,
+.no-borderradius .pagination .currentStep {
+	background-color: transparent;
+	color: #444444;
+	text-decoration: underline;
+}
+
+/* NAVIGATION MENU */
+
+.nav {
+	background-color: #efefef;
+	padding: 0.5em 0.75em;
+	   -moz-box-shadow: 0 0 3px 1px #aaaaaa;
+	-webkit-box-shadow: 0 0 3px 1px #aaaaaa;
+	        box-shadow: 0 0 3px 1px #aaaaaa;
+	zoom: 1;
+}
+
+.nav ul {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	zoom: 1;
+}
+
+.nav li {
+	display: block;
+	float: left;
+	list-style-type: none;
+	margin-right: 0.5em;
+	padding: 0;
+}
+
+.nav a {
+	color: #666666;
+	display: block;
+	padding: 0.1em 0.7em;
+	text-decoration: none;
+	   -moz-border-radius: 0.3em;
+	-webkit-border-radius: 0.3em;
+	        border-radius: 0.3em;
+}
+
+.nav a:active, .nav a:visited {
+	color: #666666;
+}
+
+.nav a:focus, .nav a:hover {
+	background-color: #999999;
+	color: #ffffff;
+	outline: none;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+.no-borderradius .nav a:focus, .no-borderradius .nav a:hover {
+	background-color: transparent;
+	color: #444444;
+	text-decoration: underline;
+}
+
+.nav a.home, .nav a.list, .nav a.create {
+	background-position: 0.7em center;
+	background-repeat: no-repeat;
+	text-indent: 25px;
+}
+
+.nav a.home {
+	background-image: url(../images/skin/house.png);
+}
+
+.nav a.list {
+	background-image: url(../images/skin/database_table.png);
+}
+
+.nav a.create {
+	background-image: url(../images/skin/database_add.png);
+}
+
+/* CREATE/EDIT FORMS AND SHOW PAGES */
+
+fieldset,
+.property-list {
+	margin: 0.6em 1.25em 0 0;
+	padding: 0.3em 1.8em 1.25em 0;
+	position: relative;
+	zoom: 1;
+	border: 0;
+}
+
+.property-list .fieldcontain {
+	list-style: none;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.fieldcontain {
+	margin-top: 0.5em;
+}
+
+.fieldcontain label,
+.fieldcontain .property-label {
+	color: #666666;
+	text-align: right;
+	width: 15%;
+}
+
+.fieldcontain .property-label {
+	float: left;
+}
+
+.fieldcontain .property-value {
+	display: block;
+	margin-left: 17%;
+}
+
+label {
+	cursor: pointer;
+	display: inline-block;
+	margin: 0 0.25em 0 0;
+}
+
+input, select, textarea {
+	font-family: Calibri, Verdana, Arial, sans-serif;
+	background-color: #fcfcfc;
+	border: 1px solid #cccccc;
+	font-size: 0.9em;
+	padding: 0.1em 0.4em;
+	margin: 0;
+}
+
+select {
+	padding: 0.2em 0.2em 0.2em 0;
+}
+
+select[multiple] {
+	vertical-align: top;
+}
+
+textarea {
+	width: 350px;
+	height: 150px;
+	overflow: auto; /* IE always renders vertical scrollbar without this */
+	vertical-align: top;
+}
+
+input[type=checkbox], input[type=radio] {
+	background-color: transparent;
+	border: 0;
+	padding: 0;
+}
+
+input:focus, select:focus, textarea:focus {
+	background-color: #ffffff;
+	border: 1px solid #eeeeee;
+	outline: 0;
+	   -moz-box-shadow: 0 0 0.5em #ffffff;
+	-webkit-box-shadow: 0 0 0.5em #ffffff;
+	        box-shadow: 0 0 0.5em #ffffff;
+}
+
+.required-indicator {
+	color: #48802C;
+	display: inline-block;
+	font-weight: bold;
+	margin-left: 0.3em;
+	position: relative;
+	top: 0.1em;
+}
+
+ul.one-to-many {
+	display: inline-block;
+	list-style-position: inside;
+	vertical-align: top;
+}
+
+.ie6 ul.one-to-many, .ie7 ul.one-to-many {
+	display: inline;
+	zoom: 1;
+}
+
+ul.one-to-many li.add {
+	list-style-type: none;
+}
+
+/* EMBEDDED PROPERTIES */
+
+fieldset.embedded {
+	background-color: transparent;
+	border: 1px solid #CCCCCC;
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 0;
+	padding-right: 0;
+	   -moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	        box-shadow: none;
+}
+
+fieldset.embedded legend {
+	margin: 0 1em;
+}
+
+.skip { 
+	display: none;
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE questions [
+
+<!ELEMENT questions (single|multiple|yesno|textbox|br|matrix)+>
+
+<!ELEMENT single (text,choices,branches?)>
+<!ATTLIST single id CDATA #REQUIRED>
+<!ATTLIST single type (select|radio) "select">
+<!ATTLIST single hasOther (yes|no) "no">
+<!ATTLIST single hasOtherText CDATA #IMPLIED>
+<!ELEMENT text (#PCDATA)>
+<!ELEMENT choices (choice+)>
+<!ELEMENT choice (#PCDATA)>
+
+<!ELEMENT multiple (text, choices,branches?)>
+<!ATTLIST multiple id CDATA #REQUIRED>
+<!ATTLIST multiple type (checkbox) "checkbox">
+<!ATTLIST multiple hasOther (yes|no) "no">
+<!ATTLIST multiple hasOtherText CDATA #IMPLIED>
+
+<!ELEMENT textbox (text)>
+<!ATTLIST textbox id CDATA #REQUIRED>
+<!ATTLIST textbox width CDATA #IMPLIED>
+<!ATTLIST textbox height CDATA #IMPLIED>
+
+<!ELEMENT yesno (text,branches?)>
+<!ATTLIST yesno id CDATA #REQUIRED>
+<!ATTLIST yesno type (select|radio|checkbox) "radio">
+
+<!ELEMENT br EMPTY>
+
+<!ELEMENT matrix (text, rows, branches?)>
+<!ATTLIST matrix id CDATA #REQUIRED>
+<!ATTLIST matrix range CDATA #IMPLIED>
+<!ATTLIST matrix lowText CDATA #IMPLIED>
+<!ATTLIST matrix midText CDATA #IMPLIED>
+<!ATTLIST matrix highText CDATA #IMPLIED>
+<!ATTLIST matrix forceBreak (yes|no) "no">
+<!ATTLIST matrix style (greyscale|rainbow|red-green|none) "none">
+<!ATTLIST matrix type (radio|select) "radio">
+<!ELEMENT rows (row+)>
+<!ELEMENT row (#PCDATA)>
+
+<!ELEMENT branches (branch+)>
+<!ELEMENT branch (if,goto)>
+<!ELEMENT if (#PCDATA)>
+<!ELEMENT goto (#PCDATA)>
+
+]>
+
+
+<questions>
+	<single id="1" type="select">
+		<text>What is your favourite sport?</text>
+		<choices>
+			<choice>Football</choice>
+			<choice>Hockey</choice>
+			<choice>Soccer</choice>
+		</choices>
+		<branches>
+			<branch>
+				<if>Football</if>
+				<goto>5</goto>
+			</branch>
+		</branches>
+	</single>
+	<multiple id="2" type="checkbox" hasOther="yes" hasOtherText="Or another sport?">
+		<text>Which sports have you played?</text>
+		<choices>
+			<choice>Football</choice>
+			<choice>Hockey</choice>
+			<choice>Soccer</choice>
+		</choices>
+	</multiple>
+	<textbox id="3">
+		<text>What is your name?</text>
+	</textbox>
+	<yesno id="4">
+		<text>Do you work for the government?</text>
+	</yesno>
+	<br />
+	<matrix id="5" range="1..5" lowText="Very dissatisfied"
+		highText="Very satisfied" style="red-green">
+		<text>Rate the following factors on a scale of 1 to 5.</text>
+		<rows>
+			<row>Cleanliness</row>
+			<row>Safety</row>
+			<row>Quality of food</row>
+			<row>Price</row>
+		</rows>
+	</matrix>
+</questions>
