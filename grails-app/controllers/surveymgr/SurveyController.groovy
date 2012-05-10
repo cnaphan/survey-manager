@@ -4,137 +4,72 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class SurveyController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	
-	 static scaffold = true
-	 
-	 def pick() {
-	 	 def surveys
-	 	 if (!params.includeInactive?.equals("true")) {
-	 	 	 surveys = Survey.findAllByStateInList([Survey.State.DORMANT, Survey.State.ACTIVE], [sort: "createdDate", order: "desc"])
-	 	 } else {
-	 	 	 surveys = Survey.list(sort: "createdDate", order: "desc")
-	 	 }
-		 [surveyInstanceList: surveys]
-	 }
-	 
-	 def set() {
-		 if (!params.surveyId) {
-			 log.warn("Tried to pick survey but no ID was passed")
-			 flash.messages =  [["warn", "You must pick a survey"]]
-			 redirect(action: "pick")
-			 return;			 
-		 }
-		 if (session.survey && session.survey.id.toString().equals(params.surveyId)) {
-			 log.info("User picked the same survey as before")
-			 if (params.origUrl) {
-				 redirect(uri: params.origUrl)
-			 } else {
-				 redirect(controller: "admin", action: "dashboard")
-			 }
-			 return;
-		 }
-		 def survey = Survey.get(params.surveyId)
-		 if (!survey) {
-			 log.warn("Tried to pick survey ${params.surveyId} but could not find it")
-			 flash.messages = [["warn", "Could not find survey with ID=${params.surveyId}"]]
-			 redirect(action: "pick")
-		 } else {
-		 	log.info("User ${session.user.name} picked survey ${survey.name}")
-			flash.message = "Now using survey '${survey.name}'"
-		 	session.survey = survey
-			// Tap the associations to ensure they don't need to be lazily initialized later on
-			if (params.origUrl) {
-				redirect(uri: params.origUrl)
-			} else {
-				redirect(controller: "admin", action: "dashboard")
-			}			 
-		 }
-	 }
-	
-/*
-    def index() {
-        redirect(action: "list", params: params)
-    }
-
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [surveyInstanceList: Survey.list(params), surveyInstanceTotal: Survey.count()]
-    }
-
+    static allowedMethods = [save: "POST", update: "POST", delete: "GET"]
+        
     def create() {
-        [surveyInstance: new Survey(params)]
-    }
-
+    	def s = new Survey(params)
+    	if (!checkPermissions(s)) { return }
+    	s.owner = session.user
+        [surveyInstance: s]
+    }	
+    
     def save() {
-        def surveyInstance = new Survey(params)
-        if (!surveyInstance.save(flush: true)) {
-            render(view: "create", model: [surveyInstance: surveyInstance])
+        def s = new Survey(params)
+    	if (!checkPermissions(s)) { return }
+    	s.owner = session.user
+    	s.properties = params
+        if (!s.save(flush: true)) {
+            render(view: "create", model: [surveyInstance: s])
             return
         }
 
-		flash.message = message(code: 'default.created.message', args: [message(code: 'survey.label', default: 'Survey'), surveyInstance.id])
-        redirect(action: "show", id: surveyInstance.id)
+		flash.message = "Survey '${s.name}' has been created"
+		session.survey = s
+        redirect(controller: "admin", action: "dashboard")
     }
 
-    def show() {
-        def surveyInstance = Survey.get(params.id)
-        if (!surveyInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'survey.label', default: 'Survey'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [surveyInstance: surveyInstance]
-    }
-*/
-    def edit() {
-		if (!params.id && session.survey) {
-			log.debug("No survey ID passed so using session survey ID")
-			params.id = session.survey.id
-		}
-		
-        def surveyInstance = Survey.get(params.id)
-		
-        if (!surveyInstance) {
-            flash.error = message(code: 'default.not.found.message', args: [message(code: 'survey.label', default: 'Survey'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [surveyInstance: surveyInstance, operatorInstanceList: User.findAllByIdNot(surveyInstance.owner.id, [sort: "name", order: "asc"])]
-    }
-/*
+	def edit () {
+		def s = Survey.get(params.id)
+    	if (!checkPermissions(s)) { return }
+		[surveyInstance: s, origUrl: params.origUrl]
+	}
+	
     def update() {
-        def surveyInstance = Survey.get(params.id)
-        if (!surveyInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'survey.label', default: 'Survey'), params.id])
-            redirect(action: "list")
-            return
-        }
-
+        def s = Survey.get(params.id)
+    	if (!checkPermissions(s)) { return }
+        
         if (params.version) {
             def version = params.version.toLong()
-            if (surveyInstance.version > version) {
-                surveyInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'survey.label', default: 'Survey')] as Object[],
-                          "Another user has updated this Survey while you were editing")
-                render(view: "edit", model: [surveyInstance: surveyInstance])
+            if (s.version > version) {
+                s.errors.rejectValue("version", "default.optimistic.locking.failure",
+                          ["Survey"] as Object[],
+                          "Another user has updated the survey while you were editing")
+                render(view: "edit", model: [surveyInstance: s])
                 return
             }
         }
 
-        surveyInstance.properties = params
+        s.properties = params
 
-        if (!surveyInstance.save(flush: true)) {
-            render(view: "edit", model: [surveyInstance: surveyInstance])
+        if (!s.save(flush: true)) {
+            render(view: "edit", model: [surveyInstance: s])
             return
         }
-
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'survey.label', default: 'Survey'), surveyInstance.id])
-        redirect(action: "show", id: surveyInstance.id)
+        
+		flash.message = "The survey '${s.name}' has been modified"
+        session.survey = s
+        
+        if (s.equals(session.survey)) {
+        	redirect(controller: "admin", action: "dashboard")	
+        } else {
+        	redirect(uri: "/")
+        }        
     }
+    
 
+    
+    
+   /*
     def delete() {
         def surveyInstance = Survey.get(params.id)
         if (!surveyInstance) {
@@ -155,4 +90,34 @@ class SurveyController {
     }
     
     */
+    
+    /**
+     * Ensures the user has sufficient privileges to work with the survey. Works for both new and existing surveys.
+     */
+    private boolean checkPermissions(Survey s) {
+    	if (!s) {
+			flash.error = message(code: 'default.not.found.message', args: ["Survey", params.id])
+			log.warn("Attempt to access survey #${params.id} which did not exists")
+		} else if (s.id && session.user != s.owner && session.user.group < User.Group.ADMIN) {
+			// Ensure the user has sufficient privilege to edit the survey
+			flash.error = message(code: 'default.insufficient.authority.message')
+			log.warn("Attempt to edit survey ${s.name} by user ${session.user.name} without sufficient authority")
+		} else if (!s.id && session.user.group < User.Group.MANAGER) {
+			// Ensure user has sufficinet privilege to create the survey
+			flash.error = message(code: 'default.insufficient.authority.message')
+			log.warn("Attempt to create survey by user ${session.user.name} without sufficient authority")			
+		} else if (s.state >= Survey.State.ACTIVE) {
+			// Ensure the survey is in the dormant state
+			flash.error = "Cannot modify non-dormant survey"
+			log.warn("Attempt to modify non-dormant survey ${s.name} by user ${session.user.name}")
+		} else {
+			return true
+		}
+        if (s.equals(session.survey)) {
+        	redirect(controller: "admin", action: "dashboard")	
+        } else {
+        	redirect(uri: "/")
+        }        
+		return false
+    }
 }

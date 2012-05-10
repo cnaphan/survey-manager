@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<div id="body" class='narrow'>
-			<h1>Select Respondent</h1>
+			<h3>Select Respondent</h3>
 			<g:if test="${respondents }">
 			<p>Which respondent will you act as?</p>
 			<g:form action="selectRespondent">

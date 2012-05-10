@@ -22,7 +22,7 @@
 			<g:if test="${surveyInstanceList }">
 			<div style="float: right;"><g:checkBox name="includeInactiveSurveys" checked="${params.includeInactive}"/> <label for="includeInactiveSurveys">Include inactive surveys</label></div>
 			<p>Which survey would you like to work on?</p>
-			<g:form action="set">
+			<g:form action="setSurvey">
 				<g:hiddenField name="origUrl" value="${params.origUrl }"/>
 				<table class="data">
 					<thead>

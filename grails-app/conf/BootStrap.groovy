@@ -10,14 +10,17 @@ class BootStrap {
 			new User(name: "kelly", password: "stats", group: User.Group.MANAGER).save(failOnError: true)
 			new User(name: "joe", password: "stats", group: User.Group.OPERATOR).save(failOnError: true, flush: true)
 		}
-		
 		if (!Survey.count()) {
-			def s = new Survey(name: "Employee Satisfaction 2012", active: true, owner: User.findByName("nikki"), expiryDate: new GregorianCalendar(2012,12,25).time)
-			s.attributes.hasPublicView = true
-			s.attributes.questionsPerPage = 5
-			s.attributes.hasTelephoneMode = true
+			def s = new Survey(name: "Employee Satisfaction 2012", state: Survey.State.ACTIVE, owner: User.findByName("nikki"), expiryDate: new GregorianCalendar(2012,12,25).time)
+			s.hasPublicView = true
+			s.questionsPerPage = 5
+			s.hasTelephoneMode = true
+			s.addToHistory(new SurveyHistory(user: s.owner, title: "Survey Created", text: "Survey '${s.name}' was created"))
 			s.save(failOnError: true)
-			new Survey(name: "HR Survey 2012", owner: User.findByName("kelly")).save(failOnError: true)
+			
+			def s2 = new Survey(name: "HR Survey 2012", owner: User.findByName("kelly"))
+			s2.addToHistory(new SurveyHistory(user: s2.owner, title: "Survey Created", text: "Survey '${s2.name}' was created"))
+			s2.save(failOnError: true)
 			
 			def q1 = new Question(survey: s, questionId: "A1", text: "What is your favourite sport?", type: Question.Type.SINGLE, sortOrder: 1)
 				.addToChoices(new Choice(text: "Football"))
@@ -63,10 +66,8 @@ class BootStrap {
 				new Answer(respondent: r1, question: q5, textValue: "yes"),
 				new Answer(respondent: r1, question: q6, textValue: "Darts").addToChoices(q6.choices.toArray()[0])
 			]*.save(failOnError: true, flush: true)
-		}
 			
-
-		
+		}	
     }
     def destroy = {
     }

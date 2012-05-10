@@ -20,7 +20,7 @@
 			</ul>
 		</div>
 		<div id="body" class="indented">
-			<h1>Grant Survey Permissions</h1>
+			<h3>Grant Survey Permissions</h3>
 			<p>Granting permission to users gives them the ability to work on a particular survey. Users in the "Manager" group can modify (but not delete) the 
 			survey, while users in the "Operator" group can only enter data.</p>
 			<g:form action="savePermissions">

@@ -18,7 +18,7 @@ class OperatorController {
     	def respondents = Respondent.findAllBySurvey(s, params)
     	def respondentTotal = Respondent.countBySurvey(s)
     	if (log.isInfoEnabled()) { log.info("User ${session.user.name} selecting respondent for survey ${s.name} out of ${respondentTotal} respondents") } 
-    	render(view: "/public/pickRespondent", model: [respondents: respondents, respondentTotal: respondentTotal])
+    	render(view: "pickRespondent", model: [respondents: respondents, respondentTotal: respondentTotal])
     }
     
      /**

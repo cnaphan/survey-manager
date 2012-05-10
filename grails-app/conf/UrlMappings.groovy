@@ -12,7 +12,7 @@ class UrlMappings {
 		
 		"/~$surveyName/$pageNum?" (controller: "public", action: "take") { }
 				
-		"/" (controller: "login", action: "index") {} 
+		"/" (controller: "home", action: "index") {} 
 		
 		"500"(view:'/error')
 	}

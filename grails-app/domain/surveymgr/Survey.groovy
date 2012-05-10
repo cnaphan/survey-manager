@@ -17,9 +17,16 @@ class Survey {
 	Date createdDate = new Date()
 	Date expiryDate
 	State state = State.DORMANT
-	Attributes attributes = new Attributes() // Additional properties that are rarely used	
 	
-	static hasMany = [respondents: Respondent, questions: Question, operators: User]
+	boolean hasPublicView = false
+	boolean hasTelephoneMode = false
+	Integer questionsPerPage = 4	
+	
+	
+	static hasMany = [respondents: Respondent, 
+					  questions: Question,
+					  operators: User,
+					  history: SurveyHistory]
 	static mappedBy = [operators: "assignedSurveys", owner: "ownedSurveys"]
 	
 	static mapping = {
@@ -31,18 +38,8 @@ class Survey {
 		description(maxSize: 500, nullable: true)
 		createdDate(editable: false, format: 'yyyy-MM-dd')
 		expiryDate(nullable: true, , format: 'yyyy-MM-dd')
-		owner(editable: false)
+		questionsPerPage(nullable: true, min: 1, max: 99)
     }
-	static embedded = ["attributes"]
-}
-
-public class Attributes {
-	boolean hasPublicView = false
-	boolean hasTelephoneMode = false
-	Integer questionsPerPage = 4
 	
-	static constraints = {
-		questionsPerPage(min: 0, max: 99)
-	}
 }
 

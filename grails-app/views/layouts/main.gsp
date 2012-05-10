@@ -44,16 +44,16 @@ $(function() {
 				<div id="survey-info">
 					Survey: 
 					<g:if test="${request.getSession(false) && session.survey }">
-						<strong>${ session.survey.name }</strong> (<g:link controller="survey" action="pick" params="${[origUrl:request.forwardURI-request.contextPath ] }">change</g:link>)					
+						<strong>${ session.survey.name }</strong> (<g:link controller="home" action="pickSurvey" params="${[origUrl:request.forwardURI-request.contextPath ] }">change</g:link>)					
 					</g:if>
 					<g:else>
-						<i>None</i> (<g:link controller="survey" action="pick" params="${[origUrl:request.forwardURI-request.contextPath] }">pick</g:link>)
+						<i>None</i> (<g:link controller="home" action="pickSurvey" params="${[origUrl:request.forwardURI-request.contextPath] }">pick</g:link>)
 					</g:else>
 				</div>
 				<g:if test="${request.getSession(false) && session.survey }">
 					<div id='quick-links'>
 						<g:link controller="admin" action="dashboard">Dashboard</g:link>
-						<g:if test="${session.survey.attributes.hasPublicView}">
+						<g:if test="${session.survey.hasPublicView}">
 							<g:link controller="public" uri="/~${surveymgr.SecurityUtils.encodeAsUrlFriendly(session.survey.name)}">Public View</g:link>
 						</g:if>
 					</div>

@@ -1,11 +1,17 @@
 <%@ page import="surveymgr.Survey" %>
-
+<g:javascript>
+	$().ready(function() {
+		$("#fieldcontain-questionsPerPage").css("display", $("#hasPublicView").is(":checked") ? "block" : "none") ;
+		$("#hasPublicView").change(function() {
+			$("#fieldcontain-questionsPerPage").css("display", $("#hasPublicView").is(":checked") ? "block" : "none") ;
+		});
+	});
+</g:javascript>
 <div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'name', 'error')} ">
 	<label for="name">
 		<g:message code="survey.name.label" default="Name" />
-		
 	</label>
-	<g:textField name="name" maxlength="50" value="${surveyInstance?.name}"/>
+	<g:textField name="name" maxlength="50" value="${surveyInstance?.name}" style="width: 30em;"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'description', 'error')} ">
@@ -13,7 +19,7 @@
 		<g:message code="survey.description.label" default="Description" />
 		
 	</label>
-	<g:textArea name="description" style="width: 30em; height: 5em; maxlength="500" value="${surveyInstance?.description}"/>
+	<g:textArea name="description" style="width: 40em; height: 5em; maxlength="500" value="${surveyInstance?.description}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'createdDate', 'error')} required">
@@ -21,26 +27,34 @@
 		<g:message code="survey.createdDate.label" default="Created Date" />
 		<span class="required-indicator">*</span>
 	</label>
-	${surveyInstance?.createdDate?.toString()}
+	<g:formatDate date="${surveyInstance.createdDate }" formatName="format.longDate"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'expiryDate', 'error')} ">
 	<label for="expiryDate">Expiry Date</label>
-	<g:datePicker name="expiryDate" format="yyyy-MM-dd" precision="day"  value="${surveyInstance?.expiryDate}" default="none" noSelection="['': '']" />
+	<g:datePicker name="expiryDate" format="yyyy-MM-dd" precision="day"  value="${surveyInstance?.expiryDate}" default="none" noSelection="['': '']"  relativeYears="[0..1]"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'state', 'error')} required">
+<div class="fieldcontain">
 	<label for="state">
 		<g:message code="survey.state.label" default="State" />
-		<span class="required-indicator">*</span>
 	</label>
-	<g:select name="state" from="${surveymgr.Survey$State?.values()}" keys="${surveymgr.Survey$State.values()*.name()}" required="" value="${surveyInstance?.state?.name()}"/>
+	${surveyInstance.state.toString()}
 </div>
-<fieldset style="padding: 0.2em 0.5em; border: 1px solid #DDD; width: 50%; margin-left: 10%;">
-	<legend >Survey Type</legend>
-	<div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'attributes.hasPublicView', 'error')} ">
-		<label for="hasPublicView">Public View
-		</label>
-		<g:checkBox name="hasPublicView" value="${surveyInstance.attributes.hasPublicView}" />
+
+<fieldset class="subform">
+	<legend>Survey Type</legend>
+	<div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'hasPublicView', 'error')} ">
+		<label for="hasPublicView">Web Survey Mode</label>
+	<g:checkBox name="hasPublicView" checked="${surveyInstance?.hasPublicView}" /> Whether a public web survey will be made available
 	</div>
+	<div id="fieldcontain-questionsPerPage" class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'questionsPerPage', 'error')} ">
+		<label for="questionsPerPage">Questions per Page</label>
+		<g:textField name="questionsPerPage" value="${surveyInstance?.questionsPerPage}" style="width: 2em;" maxlength="2"/>
+	</div>	
+	<hr/>
+	<div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'hasTelephoneMode', 'error')} ">
+		<label for="hasTelephoneMode">Telephone Mode</label>
+		<g:checkBox name="hasTelephoneMode" checked="${surveyInstance?.hasTelephoneMode}" /> Whether CATI features are enabled for this survey
+	</div>	
 </fieldset>

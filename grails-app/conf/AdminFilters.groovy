@@ -3,39 +3,34 @@ class AdminFilters {
 
 	def filters = {
 	
-		 loggedInOnly(controller:"*", action:"*") {
+		 loggedInOnly(controller:"*", action:"*", controllerExclude:"public|login") {
 			before = {
-				if (!(controllerName in ["public", "login"]) ) { 
-					if (!session.user) {
-						log.info("Attempt to reach ${request.forwardURI} without user. Redirecting to login")
-						flash.message = "Please login before continuing"
-						redirect(controller:"login", action:"login", params: [origUrl:request.forwardURI-request.contextPath])
-						return false
-					}
+				if (!session.user) {
+					log.info("Attempt to reach ${request.forwardURI} without user. Redirecting to login")
+					flash.message = "Please login before continuing"
+					redirect(controller:"login", action:"login", params: [origUrl:request.forwardURI-request.contextPath])
+					return false
 				}
 			}
 		}
 		
-		mustBeAdmin(controller: "survey|user", actionExclude: "pick") {
+		mustBeAdmin(controller: "user") {
 			before = {
 				if (!session.user || session.user.group < surveymgr.User.Group.ADMIN) {
 					flash.error = "You must be an administrator to access that page"
-					redirect(controller:"login", action:"login", params: [origUrl:url])
+					redirect(controller:"login", action:"login", params: [origUrl:request.forwardURI-request.contextPath])
 					return false
 				}
 			}
 		}
 		 
-		mustHaveSurvey(controller: "question|admin|respondent|public|operator") {
+		mustHaveSurvey(controller: "question|admin|respondent|operator") {
 			before = {
-				if (!(controllerName in ["public"]) ||
-					(controllerName == "public" && actionName in ["pickRespondent","selectRespondent", "quit"])) {
-					if (!session.survey) {
-						log.info("Attempt to reach ${request.forwardURI} without survey. Redirecting to survey/pick")
-						flash.message = "You must pick a survey before continuing to that page"					
-						redirect(controller: "survey", action:"pick", params: [origUrl:request.forwardURI-request.contextPath])
-						return false
-					}
+				if (!session.survey) {
+					log.info("Attempt to reach ${request.forwardURI} without survey. Redirecting to survey/pick")
+					flash.message = "You must pick a survey before continuing to that page"					
+					redirect(controller: "home", action:"pickSurvey", params: [origUrl:request.forwardURI-request.contextPath])
+					return false
 				}
 			}
 		}
@@ -52,7 +47,7 @@ class AdminFilters {
 						} else {
 							log.info("Attempt to reach ${request.forwardURI} without survey. Redirecting to survey/pick")
 							flash.message = "You must pick a survey before continuing to that page"					
-							redirect(controller: "survey", action:"pick", params: [origUrl:request.forwardURI-request.contextPath])
+							redirect(controller: "home", action:"pickSurvey", params: [origUrl:request.forwardURI-request.contextPath])
 						}
 						return false
 					} else {

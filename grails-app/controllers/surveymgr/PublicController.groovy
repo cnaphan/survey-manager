@@ -8,7 +8,6 @@ class PublicController {
 	
    
     def take() {
-    	assert session.respondent
     	Integer pageNum
 		try {
 			pageNum = params.pageNum ? Integer.parseInt(params.pageNum) : 1
@@ -44,7 +43,7 @@ class PublicController {
 			log.warn("Attempt to reach non-active survey '${s.name}' with state ${s.state}")
 			render(view: "inactive")
 			return
-		} else if (!s.attributes.hasPublicView) {
+		} else if (!s.hasPublicView) {
 			log.warn("Attempt to reach survey '${s.name}' with no public view")
 			render(status: 404) // Return 404 Page Not Found
 			return
@@ -52,7 +51,7 @@ class PublicController {
 		if (log.isDebugEnabled()) { log.debug("Fetched survey '${s.name}', page #${pageNum}") }
 		
 		// Prepare the questions for this page
-		Integer questionsPerPage = s.attributes.questionsPerPage
+		Integer questionsPerPage = s.questionsPerPage
 		// Get all the questions for this survey
 		def allQuestions = Question.createCriteria().list{
 			eq("survey", s)
@@ -88,15 +87,15 @@ class PublicController {
 			return
 		}
 		
+		def answers = [:]
 		// Prepare the answers to these questions
-		def r = Respondent.findBySurveyAndEmail(s, "cnaphan@gmail.com") // TODO Need to get respondent via page filters
+		def r = Respondent.get(session.respondent.id)
 		if (!r) {
 			log.warn("Reached page #${pageNum} of survey '${s.name}' but could not get respondent. Likely cause is broken filter.")
 			render (status: 500)
 			return
 		}
 		
-		def answers = [:]
 		if (log.isDebugEnabled()) { log.debug("Inspecting ${r.name}'s ${r.answers.size()} answers") }
 		if (r.answers.size() > 0) {
 			for (def q : questions) {
@@ -109,6 +108,7 @@ class PublicController {
 				}
 			}
 		}
+
 		if (log.isInfoEnabled()) { log.info("Using question list ${questions.collect{it.questionId}} and answer list ${answers.collect{it.value.question.questionId}}") }
 		
     	[s:s, questions: questions, answers: answers, currentPage: pageNum, totalPages: currentPage]

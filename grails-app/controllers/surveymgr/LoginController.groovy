@@ -5,10 +5,6 @@ import surveymgr.User;
 class LoginController {
 
 	static allowedMethods = [login: "GET", authenticate: "POST"]
-
-	def index() {
-		log.info("Activating creature report!")
-	}
 	
 	def login() {
 		log.info("Loading login screen from ${params.origUrl}")
@@ -29,6 +25,7 @@ class LoginController {
 			redirect(action: "login")
 			return
 		}
+		assert User.count() > 0
 		if (log.isDebugEnabled()) { log.debug("Authenticating ${params.name} with orig. URL = '${params.origUrl ? params.Url : 'none'}") }
 		def user = User.findByNameAndPasswordAndActive(params.name, SecurityUtils.encodeAsSHA(params.password),true)
 		if (user) {

@@ -1,32 +1,29 @@
-<%@ page import="surveymgr.Survey" %>
+<%@ page import="surveymgr.*" %>
 <!doctype html>
 <html>
 	<head>
+		<title><g:message code="title" args="['Modify Survey']"/></title>
 		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'survey.label', default: 'Survey')}" />
-		<title><g:message code="default.edit.label" args="[entityName]" /></title>
+		<g:javascript>
+			$(function() {
+				$(".buttons button").button({ icons: { primary: "ui-icon-disk" } }).next()
+					.button({ icons: { primary: "ui-icon-cancel" } }).parent().buttonset()
+			});
+		</g:javascript>
 	</head>
 	<body>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
 		<div id="body" class="narrow">
-			<h1><g:message code="default.edit.label" args="[entityName]" /></h1>
-			<g:messages/>
-			<g:form method="post" >
+			<h3>Edit Survey</h3>
+			<g:form action="update">
 				<g:hiddenField name="id" value="${surveyInstance?.id}" />
-				<g:hiddenField name="version" value="${surveyInstance?.version}" />
+				<g:hiddenField name="version" value="${surveyInstance?.version}" />			
 				<fieldset class="form">
-					<g:render template="form"/>
+					<g:render template="/survey/form"/>
 				</fieldset>
-				<fieldset class="buttons">
-					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
+				<div class="buttons">
+					<button class="save" type="submit">Save</button>
+					<g:buttonLink class="cancel" action="dashboard" >Cancel</g:buttonLink>
+				</div>
 			</g:form>
 		</div>
 	</body>

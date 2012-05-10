@@ -82,12 +82,13 @@ body {
 	width: 60%;
 }
 
-h1, h2, h3 {
+h1, h2, h3, legend {
 	font-family: Cambria, Arial, serif;
+	font-weight: bold;
 	margin: 0.5em 0;
 }
 
-h1, #header h1 a, h2, h3 {
+h1, #header h1 a, h2, h3, legend {
 	color: navy;
 }
 
@@ -355,7 +356,7 @@ fieldset,
 .fieldcontain .property-label {
 	color: #666666;
 	text-align: right;
-	width: 15%;
+	width: 10em;
 }
 
 .fieldcontain .property-label {
@@ -364,7 +365,17 @@ fieldset,
 
 .fieldcontain .property-value {
 	display: block;
-	margin-left: 17%;
+	margin-left: 10em;
+}
+
+fieldset.subform {
+	padding: 0.2em 0.5em; 
+	border: 1px solid #DDD;
+	width: 80%; 
+	margin-left: 10%;
+}
+
+fieldset.subform legend {
 }
 
 label {

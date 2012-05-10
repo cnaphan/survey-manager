@@ -1,5 +1,9 @@
 package surveymgr
 
+/**
+ * A controller that contains actions for administering a survey. Not necessarily changing the survey object but working with its state and other 
+ * features.
+ */
 class AdminController {
 
     def index() { }
@@ -20,8 +24,44 @@ class AdminController {
 		[s:s, statistics: statistics]
 	}
 	
-	def edit () {
-		[surveyInstance: Survey.get(session.survey.id)]
+	def changeState() {
+		if (!params.to) {
+			flash.error = "Must supply state to change to"
+			log.warn ("Attempt to change state without supplied state for survey ${s.name} by user ${session.user.name}")
+			redirect(action: "dashboard")
+			return
+		}
+		
+		def s = Survey.get(session.survey.id)
+		def oldState = s.state
+		def newState = Survey.State.values().find { it.toString().equals(params.to) }
+		assert oldState instanceof Survey.State
+		assert newState instanceof Survey.State
+		
+		if (!newState) {
+			flash.error = "State '${params.to}' was not recognized"
+			log.warn ("Attempt to change to invalid state ${params.to} for survey ${s.name} by user ${session.user.name}")
+			redirect(action: "dashboard")
+			return
+		} else if (newState == oldState) {
+			flash.message = "State was not modified"
+			log.warn("Attempt to change to same state ${params.to} for survey ${s.name} by user ${sesson.user.name}")
+			redirect(action: "dashboard")
+			return
+		}
+		
+		s.state = newState
+		if (s.save(flush: true)) {				
+			flash.message = "The state of survey '${s.name}' has been changed from ${oldState.toString()} to ${s.state.toString()}"			
+		}
+		redirect(action: "dashboard")
+	}
+	
+	def viewHistory() {
+		if (!params.sort) { params.sort = "dateCreated" }
+		if (!params.order) { params.order = "asc" }
+		if (!params.max) { params.max = 25 }
+		[history: SurveyHistory.findAllBySurvey(session.survey, params), historyTotal: SurveyHistory.countBySurvey(session.survey)] 
 	}
 		
 	

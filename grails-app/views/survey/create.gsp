@@ -5,24 +5,25 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'survey.label', default: 'Survey')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
+		<g:javascript>
+			$(function() {
+				$(".buttons button").button({ icons: { primary: "ui-icon-disk" } }).next()
+					.button({ icons: { primary: "ui-icon-cancel" } }).parent().buttonset()
+			});
+		</g:javascript>
 	</head>
 	<body>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
 		<div id="body" class="narrow">
-			<h1><g:message code="default.create.label" args="[entityName]" /></h1>
+			<h3><g:message code="default.create.label" args="[entityName]" /></h3>
 			<g:messages/>
 			<g:form action="save" >
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
-				<fieldset class="buttons">
-					<g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-				</fieldset>
+				<div class="buttons">
+					<button class="save" type="submit">Save</button>
+					<g:buttonLink class="cancel" controller="admin" action="dashboard" >Cancel</g:buttonLink>
+				</div>
 			</g:form>
 		</div>
 	</body>

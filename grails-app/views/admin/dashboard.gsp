@@ -65,45 +65,54 @@
 			</ul>
 		</div>
 		<div id="body" class='indented'>
-			<h1>Survey Dashboard</h1>
+			<h3>Survey Dashboard</h3>
 			<g:messages/>
 			<ol class='property-list' style="width: 75%; padding-bottom: 0; ">
 				<li class="fieldcontain">
 					<span class="property-label">Name:</span>
 					<span class="property-value">${s.name }
 				</li>
-				<li class="fieldcontain"><span class="property-label">Description:</span> <span class="property-value">${s.description }</span></li>
 				<g:if test="${ s.expiryDate}"><li class="fieldcontain"><span class="property-label">Expires:</span><span class="property-value"><g:formatDate date="${s.expiryDate }" formatName="format.longDate"/></span></li></g:if>
 				<li class="fieldcontain"><span class="property-label">Assigned:</span>
 					<span class="property-value">
 						${session.user == s.owner ? "me" : s.owner.name } (owner)<g:each in="${s.operators}" var="u">, ${u.name}</g:each>
 					</span>
 				</li>
-				<g:if test="${ s.attributes.hasPublicView }"><li class="fieldcontain"><span class="property-label">Public URL:</span> <span class="property-value"><input id="publicUrl" type="text" value="${ grailsApplication.config.grails.serverURL }/~${ SecurityUtils.encodeAsUrlFriendly(s.name) }" style="width: 30em;"  onclick="this.select();" readonly/></span></li></g:if>
+				<g:if test="${ s.hasPublicView }"><li class="fieldcontain"><span class="property-label">Public URL:</span> <span class="property-value"><input id="publicUrl" type="text" value="${ grailsApplication.config.grails.serverURL }/~${ SecurityUtils.encodeAsUrlFriendly(s.name) }" style="width: 30em;"  onclick="this.select();" readonly/></span></li></g:if>
 			</ol>
 			<hr/>
 			<div style="width: 33%; float: left;">
 				<h3>Survey Operations</h3>
-				<g:if test="${ s.state < Survey.State.ACTIVE }">
-					<em>The survey is no yet active so operations are not allowed.</em>
-				</g:if>
-				<g:elseif test="${ s.state == Survey.State.ACTIVE }">
 				<ul>
-					<li>
-					</li>
+					<g:if test="${ s.state < Survey.State.ACTIVE }">
+						<li><em>The survey is no yet active so operations are not allowed.</em></li>
+					</g:if>
+					<g:elseif test="${ s.state == Survey.State.ACTIVE }">
+						<li><g:link controller="operator" action="pickRespondent">Fill in survey as respondent</g:link></li>
+					</g:elseif>
+					<g:elseif test="${ s.state > Survey.State.ACTIVE }">
+						<li><em>The survey is no longer active so operations are not allowed.</em></li>
+					</g:elseif>
+					<li><g:link action="viewHistory">View survey history</g:link></li>
 				</ul>
-				</g:elseif>
-				<g:elseif test="${ s.state > Survey.State.ACTIVE }">
-					<em>The survey is no longer active so operations are not allowed.</em>
-				</g:elseif>
 			</div>
 			<g:isManager>
 				<div style="width: 33%; float: left;">
 					<h3>Survey Management</h3>
 					<ul>
-						<li><g:link action="edit">Modify survey</g:link>
+						<g:if test="${ s.state < Survey.State.ACTIVE }">
+							<li><g:link action="changeState" params="${[to:Survey.State.ACTIVE]}">Activate survey</g:link></li>
+							<li><g:link controller="survey" action="edit" id="${s.id}">Modify survey</g:link>
+							<li><g:link action="questions">Modify survey questions</g:link></li>
+						</g:if>
+						<g:elseif test="${ s.state == Survey.State.ACTIVE }">
+							<li><g:link action="changeState" params="${[to:Survey.State.DORMANT]}">Make survey dormant again</g:link> (survey is not ready yet)</li>
+							<li><g:link action="changeState" params="${[to:Survey.State.INACTIVE]}">De-activate survey</g:link> (survey is complete)</li>
+						</g:elseif>
+						<g:elseif test="${ s.state > Survey.State.ACTIVE }">
+							<li><g:link action="changeState" params="${[to:Survey.State.ACTIVE]}">Re-activate survey</g:link></li>
+						</g:elseif>
 						<li><g:link action="permissions">Grant survey permissions</g:link></li>
-						<li><g:link action="questions">Modify survey questions</g:link></li>
 					</ul>
 					<h3>Response Management</h3>
 					<ul>
