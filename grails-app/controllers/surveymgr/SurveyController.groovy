@@ -50,6 +50,8 @@ class SurveyController {
         }
 
         s.properties = params
+ 		s.addToHistory(new SurveyHistory(user: s.owner, title: "Survey Modified", text: "Survey was modified"))
+       
 
         if (!s.save(flush: true)) {
             render(view: "edit", model: [surveyInstance: s])

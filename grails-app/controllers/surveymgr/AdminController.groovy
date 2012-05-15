@@ -1,12 +1,16 @@
 package surveymgr
 
+import surveymgr.questions.*
+
 /**
  * A controller that contains actions for administering a survey. Not necessarily changing the survey object but working with its state and other 
  * features.
  */
 class AdminController {
 
-    def index() { }
+    def index() {
+    	redirect(action: "dashboard")
+    }
 	
 	def dashboard() {
 		def s = Survey.get(session.survey.id)
@@ -45,12 +49,14 @@ class AdminController {
 			return
 		} else if (newState == oldState) {
 			flash.message = "State was not modified"
-			log.warn("Attempt to change to same state ${params.to} for survey ${s.name} by user ${sesson.user.name}")
+			log.warn("Attempt to change to same state ${params.to} for survey ${s.name} by user ${session.user.name}")
 			redirect(action: "dashboard")
 			return
 		}
 		
 		s.state = newState
+		s.addToHistory(new SurveyHistory(user: s.owner, title: "State Changed", text: "State was changed from ${oldState.toString()} to ${newState.toString()}"))
+
 		if (s.save(flush: true)) {				
 			flash.message = "The state of survey '${s.name}' has been changed from ${oldState.toString()} to ${s.state.toString()}"			
 		}
@@ -59,7 +65,7 @@ class AdminController {
 	
 	def viewHistory() {
 		if (!params.sort) { params.sort = "dateCreated" }
-		if (!params.order) { params.order = "asc" }
+		if (!params.order) { params.order = "desc" }
 		if (!params.max) { params.max = 25 }
 		[history: SurveyHistory.findAllBySurvey(session.survey, params), historyTotal: SurveyHistory.countBySurvey(session.survey)] 
 	}
@@ -102,6 +108,43 @@ class AdminController {
 			log.debug("Permissions updated with no changes")
 		}
 		redirect(action:"dashboard")
+	}
+	
+	def themes() {
+		def s = Survey.get(session.survey.id) // Get a fresh copy of the survey
+	    def themes = []
+	    
+	    def themeFolder = new File(servletContext.getRealPath("/css/themes/"))
+	    themeFolder.eachDir { file -> themes << file.name }
+	    
+	    if (!(s.theme in themes)) {
+	    	log.warn("Survey ${s.name}'s theme set to unknown theme ${s.theme}. Setting to null.")
+	    	s.theme = null
+	    	s.save()
+	    	flash.message = "Survey theme set to None."
+	    }
+	    
+		[themes: themes, s:s]
+	}
+	
+	def saveTheme() {
+		def s = Survey.get(session.survey.id) // Get a fresh copy of the survey
+		def theme = params.theme ? params.theme : null
+		
+		if (s.theme != theme) {			
+			s.theme = theme
+			s.addToHistory(new SurveyHistory(user: s.owner, title: "Theme Changed", text: "Theme was changed to '${theme}'"))
+		} else {
+			redirect(action:"dashboard")
+		}
+		
+		if (s.save()) {
+			log.info("Theme for survey ${s.name} changed to ${theme ?: "none" }")
+			flash.message = "Theme changed to '${theme ?: "none" }'"
+			redirect(action:"dashboard")
+		} else {			
+			redirect(action:"themes")
+		}
 	}
 	
 }

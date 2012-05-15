@@ -17,10 +17,12 @@ class Survey {
 	Date createdDate = new Date()
 	Date expiryDate
 	State state = State.DORMANT
+	String theme
 	
 	boolean hasPublicView = false
 	boolean hasTelephoneMode = false
-	Integer questionsPerPage = 4	
+	Integer questionsPerPage = 4
+	boolean showPages = false
 	
 	
 	static hasMany = [respondents: Respondent, 
@@ -38,6 +40,8 @@ class Survey {
 		description(maxSize: 500, nullable: true)
 		createdDate(editable: false, format: 'yyyy-MM-dd')
 		expiryDate(nullable: true, , format: 'yyyy-MM-dd')
+		theme (maxSize: 25, nullable: true)
+		
 		questionsPerPage(nullable: true, min: 1, max: 99)
     }
 	

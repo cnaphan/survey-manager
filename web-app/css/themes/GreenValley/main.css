@@ -1,0 +1,38 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #fffeea;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 0.8em;
+}
+
+#body {
+	margin: 0 25%;
+	padding: 0 0 1em 0;
+	width: 50%;
+	background-color: white;
+	border: 0.1em solid #888;
+	border-width: 0 0.1em;
+}
+
+#survey-header {
+	background: left no-repeat url(icon.jpg);
+	height: 8em;
+	padding: 2em 0 2em 220px;
+	margin: 0;
+}
+
+#survey-body {
+	padding: 0 1em;
+}
+
+h1, h2, h3 {
+	font-family: serif;
+	color: #006600;
+}
+
+#current-page {
+	float: right;
+	text-align: right;
+	width: 30%;
+}

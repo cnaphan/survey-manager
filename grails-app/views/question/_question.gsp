@@ -1,8 +1,8 @@
 <%@ page import="surveymgr.questions.*" %>
 <g:each in="${questions}" var="q" status="i">
-	<g:if test="${q.attributes.sectionHeaderText }">
+	<g:if test="${q.sectionHeaderText }">
 		<div class="section-header-block">
-			${q.attributes.sectionHeaderText }
+			${q.sectionHeaderText }
 		</div>
 	</g:if>
 	<div class="question-block" class="${ i % 2 == 0 ? 'even' : 'odd' }">

@@ -7,10 +7,10 @@
 			<label for="questions.${q.questionId }.${c.id }">${c.text }</label>
 		</div>
 	</g:each>
-	<g:if test="${q.attributes.hasOther }">
+	<g:if test="${q.hasOther }">
 		<div class="other-item">
 			<g:checkBox name="questions.${q.questionId }" id="questions.${q.questionId }.0" value="0" checked="${a?.textValue ? true : false }"/> 
-			<label class='check-item-label check-other-item-label'>${q.attributes.hasOtherText ? q.attributes.hasOtherText : message(code:"default.hasOther.label") }</label>
+			<label class='check-item-label check-other-item-label'>${q.hasOtherText ? q.hasOtherText : message(code:"default.hasOther.label") }</label>
 			<g:textField name="others.${q.questionId}" value="${a?.textValue }"/>
 		</div>
 	</g:if>

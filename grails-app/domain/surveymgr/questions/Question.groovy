@@ -26,30 +26,7 @@ class Question {
 	Type type // Changes the type of question
 	Control control // Changes the control used to render the question
 	Integer sortOrder = 0 // Controls the order of questions within the survey
-	Attributes attributes = new Attributes() // Additional properties that are rarely used	
-		
-	static hasMany = [answers: Answer,
-					  choices: Choice, 
-					  branches: Branch,
-					  conditions: QuestionCondition]
-	
-	static constraints = {
-		questionId(maxSize: 10, blank: false, unique: "survey")
-		text(maxSize: 500)
-		type(maxSize: 10)
-		control(maxSize: 10, nullable: true)
-		
-    }
-	
-	static mapping = {
-		//order index:'IX_ORDER' // Speeds up queries that order by "order" a lot
-	}
-	
-	
-	static embedded = ["attributes"]
-}
 
-public class Attributes {
 	boolean forceBreak = false // Whether this question forces a new page
 	String sectionHeaderText // Text that comes before the question to announce a new section
 	// These properties only pertain to textfields
@@ -67,9 +44,18 @@ public class Attributes {
 	// These properties apply only to singles and multis
 	boolean hasOther = false // Whether the question has an "other" field, if applicable
 	String hasOtherText // Text for the "other" field, which overrides the default
-
-		
+	
+	static hasMany = [answers: Answer,
+					  choices: Choice, 
+					  branches: Branch,
+					  conditions: QuestionCondition]
+	
 	static constraints = {
+		questionId(maxSize: 10, blank: false, unique: "survey")
+		text(maxSize: 500)
+		type(maxSize: 10)
+		control(maxSize: 10, nullable: true)
+		
 		sectionHeaderText(maxSize: 2000, nullable: true)		
 		constraint(maxSize: 20, nullable: true, inList: ["numeric","integer","oneword","regex"])
 		constraintFormat(maxSize: 250, nullable: true)
@@ -79,5 +65,14 @@ public class Attributes {
 		rangeLowText(maxSize: 50, nullable: true)
 		rangeHighText(maxSize: 50, nullable: true)
 		hasOtherText(maxSize: 100, nullable: true)
+		
+    }
+	
+	static mapping = {
+		//order index:'IX_ORDER' // Speeds up queries that order by "order" a lot
+	}
+	
+	String toString() {
+		"Question[id=${questionId}, sortOrder=${sortOrder}]"
 	}
 }

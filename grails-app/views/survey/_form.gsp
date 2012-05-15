@@ -4,6 +4,7 @@
 		$("#fieldcontain-questionsPerPage").css("display", $("#hasPublicView").is(":checked") ? "block" : "none") ;
 		$("#hasPublicView").change(function() {
 			$("#fieldcontain-questionsPerPage").css("display", $("#hasPublicView").is(":checked") ? "block" : "none") ;
+			$("#fieldcontain-showPages").css("display", $("#hasPublicView").is(":checked") ? "block" : "none") ;
 		});
 	});
 </g:javascript>
@@ -17,9 +18,8 @@
 <div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'description', 'error')} ">
 	<label for="description">
 		<g:message code="survey.description.label" default="Description" />
-		
 	</label>
-	<g:textArea name="description" style="width: 40em; height: 5em; maxlength="500" value="${surveyInstance?.description}"/>
+	<g:textArea name="description" style="width: 40em; height: 5em;" maxlength="500" value="${surveyInstance?.description}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'createdDate', 'error')} required">
@@ -52,6 +52,10 @@
 		<label for="questionsPerPage">Questions per Page</label>
 		<g:textField name="questionsPerPage" value="${surveyInstance?.questionsPerPage}" style="width: 2em;" maxlength="2"/>
 	</div>	
+	<div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'showPages', 'error')} ">
+		<label for="showPages">Show Page Count</label>
+	<g:checkBox name="showPages" checked="${surveyInstance?.showPages}" />
+	</div>
 	<hr/>
 	<div class="fieldcontain ${hasErrors(bean: surveyInstance, field: 'hasTelephoneMode', 'error')} ">
 		<label for="hasTelephoneMode">Telephone Mode</label>

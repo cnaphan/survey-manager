@@ -42,10 +42,26 @@
 
 #user-div {
 	float: right; 
-	width: 10em; 
-	border: 0.1em solid #DDD; 
-	background-color: #FCFCFC;
-	padding: 1em;
+	font-size: 12px;
+	border: 2px dashed #aaa;
+	background-color: #DDD;
+	padding: 0.5em;
+	width: 15%;
+	height: 35px;
+	position: absolute;
+	top: 0;
+	left: 80%;
+	opacity:0.4;
+	filter:alpha(opacity=40); /* For IE8 and earlier */
+	overflow: hidden;	
+}
+
+#user-div:hover
+{
+	width: 15%;
+	height: auto;
+	opacity:1.0;
+	filter:alpha(opacity=100); /* For IE8 and earlier */
 }
 
 #user-div h3 {

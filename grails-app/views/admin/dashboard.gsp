@@ -53,6 +53,7 @@
 			<h1>Overview</h1>
 			<ul>
 				<li>Survey is <strong>${ s.state.toString().toLowerCase() }</strong></li>
+				<g:if test="${ s.hasPublicView }"><li>Theme: ${ s.theme ?: "none"}</li></g:if>
 				<li>${ statistics.StartedCount }/${statistics.RespondentCount } responses started</li>
 				<li>${ statistics.CompletedCount }/${statistics.RespondentCount } responses complete</li>
 			</ul>
@@ -103,7 +104,8 @@
 						<g:if test="${ s.state < Survey.State.ACTIVE }">
 							<li><g:link action="changeState" params="${[to:Survey.State.ACTIVE]}">Activate survey</g:link></li>
 							<li><g:link controller="survey" action="edit" id="${s.id}">Modify survey</g:link>
-							<li><g:link action="questions">Modify survey questions</g:link></li>
+							<li><g:link controller="question" action="list">Modify survey questions</g:link></li>
+							<g:if test="${ s.hasPublicView }"><li><g:link action="themes">Modify survey theme</g:link></g:if> 
 						</g:if>
 						<g:elseif test="${ s.state == Survey.State.ACTIVE }">
 							<li><g:link action="changeState" params="${[to:Survey.State.DORMANT]}">Make survey dormant again</g:link> (survey is not ready yet)</li>

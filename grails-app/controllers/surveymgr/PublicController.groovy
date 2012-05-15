@@ -51,7 +51,6 @@ class PublicController {
 		if (log.isDebugEnabled()) { log.debug("Fetched survey '${s.name}', page #${pageNum}") }
 		
 		// Prepare the questions for this page
-		Integer questionsPerPage = s.questionsPerPage
 		// Get all the questions for this survey
 		def allQuestions = Question.createCriteria().list{
 			eq("survey", s)
@@ -59,26 +58,10 @@ class PublicController {
 			order ("questionId", "asc")			
 		}
 		if (log.isDebugEnabled()) { log.debug("Fetched ${allQuestions.size()} questions for survey ${s.name}") }
-		Integer currentPage = 1
-		Integer questionsConsideredThisPage = 0
-		def questions = [] // Start a new list of questions that will be shown
-		for (def q : allQuestions) {
-			// Check for new page conditions
-			if ((questionsConsideredThisPage >= questionsPerPage)  ||
-				(questions.size() > 0 & q.attributes.forceBreak)) {
-				// If this isn't the first question on this page and this question forces a page break, increment the page counter
-				currentPage = currentPage + 1 // Increment the page number
-				questionsConsideredThisPage = 0 // Reset the # of questions considered this page
-				if (log.isDebugEnabled()) { log.debug("Breaking page. Going to page #${currentPage}. Looking for page #${pageNum}.") }
-			}
-			if (log.isDebugEnabled()) { log.debug("Considering question ${q.questionId} for page #${currentPage}") }
-			if (currentPage == pageNum) {
-				// If we're on the page we want, add the question to the current list
-				questions << q
-				if (log.isDebugEnabled()) { log.debug("Adding question ${q.questionId} as question #${questions.size()} of the question list") }
-			}
-			questionsConsideredThisPage++			
-		}
+		
+		def pagedQuestionResults = QuestionHelper.getPagedQuestions(allQuestions, pageNum, s.questionsPerPage)
+		def questions = pagedQuestionResults.questions
+		def totalPages = pagedQuestionResults.totalPages
 		
 		// If there are no questions on this page, return an error
 		if (!questions) {
@@ -111,7 +94,7 @@ class PublicController {
 
 		if (log.isInfoEnabled()) { log.info("Using question list ${questions.collect{it.questionId}} and answer list ${answers.collect{it.value.question.questionId}}") }
 		
-    	[s:s, questions: questions, answers: answers, currentPage: pageNum, totalPages: currentPage]
+    	[s:s, questions: questions, answers: answers, currentPage: pageNum, totalPages: totalPages]
     }
     
     def next() {
@@ -179,6 +162,18 @@ class PublicController {
     		redirect(uri: "/~${SecurityUtils.encodeAsUrlFriendly(s.name)}")
     	}
     }
+    
+    private List getStylesheetsForTheme(String theme) {
+    	def themeFolder = new File(servletContext.getRealPath("/css/themes/${theme}"))
+    	def stylesheets = []
+    	themeFolder.eachFile { file ->
+    		if (file.name.endsWith(".css")) {
+    			stylesheets << "${servletContext.getRealPath('/css/themes/${theme}')}/${file.name}"
+    		}
+    	}
+    	return stylesheets
+    }
+    
     
 
  

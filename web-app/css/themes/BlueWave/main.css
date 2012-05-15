@@ -1,0 +1,71 @@
+html {
+	background-color: #ddd;
+	background-image: -moz-linear-gradient(center top, #aaa, #ddd);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #aaa), color-stop(1, #ddd));
+	background-image: linear-gradient(top, #aaa, #ddd);
+	font-family: Arial, sans-serif;
+	font-size: 0.8em;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#aaaaaa', EndColorStr = '#dddddd');
+	background-repeat: no-repeat;
+	height: 100%;
+	/* change the box model to exclude the padding from the calculation of 100% height (IE8+) */
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+
+html.no-cssgradients {
+	background-color: #aaa;
+}
+
+.ie6 html {
+	height: 100%;
+}
+
+body {
+	background: #ffffff;
+	color: #333333;
+	margin: 0 auto;
+	padding: 0 0 5em;
+	max-width: 700px;
+	border: 0 solid #000;
+	border-width: 0 0.1em;
+	overflow-x: hidden; /* prevents box-shadow causing a horizontal scrollbar in firefox when viewport < 960px wide */
+	   -moz-box-shadow: 0 0 2em #3366ff;
+	-webkit-box-shadow: 0 0 2em #3366ff;
+	        box-shadow: 0 0 2em #3366ff;
+}
+
+#survey-body {
+	padding: 0 1em;
+}
+
+#survey-header {
+	background: top left no-repeat url(website-header-blue.jpg);
+	padding: 1em;
+	text-align: center;
+	color: #FFF;
+}
+
+#survey-header h1 {
+	text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.8);
+}
+
+#current-page {
+	width: 10em;
+	float: right;
+	text-align: right;
+	padding: 0.5em;
+}
+
+#survey-description {
+	margin: 2em 0 0 0;
+}
+
+h1,h2,h3 {
+	font-family: Tahoma, Helvetica, Arial, sans-serif;
+}
+
+#survey-footer {
+	text-align: center;
+}
